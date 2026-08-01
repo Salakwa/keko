@@ -1,5 +1,8 @@
 import sys
-import cv2 
+import cv2  
+
+#File Imports 
+import FacialDetection
 
 
 # Initialize Default Camera 
@@ -11,14 +14,19 @@ print("Camera successfully detected and connected.")
 
 # Get Camera Specs (Default frame width and height)
 frame_width = int(camera.get(cv2.CAP_PROP_FRAME_WIDTH))
-frame_height = int(camera.get(cv2.CAP_PROP_FRAME_HEIGHT))
+frame_height = int(camera.get(cv2.CAP_PROP_FRAME_HEIGHT)) 
 
+# Load in the Facial Detection 
+face_cascade = FacialDetection.LoadFacialDetection()
 
 try:
     while True:
         ret, frame = camera.read() 
         if not ret:  
-            raise RuntimeError("Camera Disconnected Unexpectedly.")
+            raise RuntimeError("Camera Disconnected Unexpectedly.") 
+
+        # Run Frame through Facial Detection 
+        faces, frame = FacialDetection.DetectFaces(frame, face_cascade, draw=True)
 
         # Display the Captured Frames Live
         cv2.imshow('Live Camera Feed', frame)
